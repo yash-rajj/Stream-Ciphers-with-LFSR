@@ -1,5 +1,7 @@
 import sys
-from collections import deque 
+from collections import deque
+from time import perf_counter
+
 def lfsr(p,s):
     n=0
     for i in p:
@@ -7,8 +9,12 @@ def lfsr(p,s):
     c=s.popleft()
     s.append(n%2)
     return c,s
+
 kfile = open(sys.argv[3], "rb")
 key=kfile.read()
+
+start = perf_counter()
+
 arr=[]
 for i in key:
     arr.append([i >> p & 1 for p in range(8)][::-1])    
@@ -37,3 +43,5 @@ while byte:
     byte = file.read(1)
 fileout.close()
 file.close()
+
+print(f'Encrypted in {perf_counter() - start}s')
